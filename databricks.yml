@@ -1,0 +1,43 @@
+bundle:
+  name: db_github_demo
+
+variables:
+  catalog:
+    description: Catalog this target reads and writes
+
+resources:
+  jobs:
+    orders_summary:
+      name: orders_summary
+      tasks:
+        - task_key: build_summary
+          notebook_task:
+            notebook_path: ./src/orders_summary.ipynb
+            base_parameters:
+              catalog: ${var.catalog}
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://dbc-2fff3f3c-0d6d.cloud.databricks.com/
+    variables:
+      catalog: orders_dev
+
+  test:
+    presets:
+      name_prefix: "[test] "
+    workspace:
+      host: https://dbc-2fff3f3c-0d6d.cloud.databricks.com/
+      root_path: /Workspace/Shared/DB_Github_Demo/test
+    variables:
+      catalog: orders_test
+
+  prod:
+    mode: production
+    workspace:
+      host: https://dbc-2fff3f3c-0d6d.cloud.databricks.com/
+      root_path: /Workspace/Shared/DB_Github_Demo/prod
+    variables:
+      catalog: orders_prod
