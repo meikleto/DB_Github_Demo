@@ -12,7 +12,7 @@ resources:
       tasks:
         - task_key: build_summary
           notebook_task:
-            notebook_path: ./src/orders_summary.py
+            notebook_path: ./src/orders_summary.ipynb
             base_parameters:
               catalog: ${var.catalog}
 
