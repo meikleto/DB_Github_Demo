@@ -21,3 +21,20 @@ jobs:
           cache: pip
       - run: pip install -r requirements-dev.txt
       - run: pytest -v
+
+  deploy-test:
+    needs: unit-tests
+    runs-on: ubuntu-latest
+    environment: test
+    concurrency:
+      group: test-target
+      cancel-in-progress: false
+    env:
+      DATABRICKS_HOST: ${{ vars.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: databricks/setup-cli@main
+      - run: databricks bundle validate -t test
+      - run: databricks bundle deploy -t test
+      - run: databricks bundle run -t test orders_summary
