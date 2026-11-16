@@ -26,7 +26,7 @@ def test_amounts_are_rounded_to_cents(spark):
 
 
 def test_output_columns_are_stable(orders):
-    assert summarize_orders(orders).columns == ["customer", "total_amount", "order_count", "average_amount"]
+    assert summarize_orders(orders).columns == ["customer", "total_amount", "order_count", "average_amount", "max_amount"]
 
 
 def test_empty_input_gives_empty_output(spark, orders):
@@ -44,3 +44,7 @@ def test_invalid_rows_are_flagged(spark):
 def test_average_order_amount(orders):
     result = by_customer(summarize_orders(orders))
     assert result["Acme"]["average_amount"] == 100.25
+
+def test_max_order_amount(orders):
+    result = by_customer(summarize_orders(orders))
+    assert result["Acme"]["max_amount"] == 120.00
