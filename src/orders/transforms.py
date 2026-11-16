@@ -9,6 +9,7 @@ def summarize_orders(orders: DataFrame) -> DataFrame:
         .agg(
             F.round(F.sum("amount"), 2).alias("total_amount"),
             F.count("*").alias("order_count"),
+            F.round(F.avg("amount"), 2).alias("average_amount"),
         )
         .orderBy("customer")
     )
