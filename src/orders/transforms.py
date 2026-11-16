@@ -10,6 +10,7 @@ def summarize_orders(orders: DataFrame) -> DataFrame:
             F.round(F.sum("amount"), 2).alias("total_amount"),
             F.count("*").alias("order_count"),
             F.round(F.avg("amount"), 2).alias("average_amount"),
+            F.round(F.max("amount"), 2).alias("max_amount"),
         )
         .orderBy("customer")
     )
